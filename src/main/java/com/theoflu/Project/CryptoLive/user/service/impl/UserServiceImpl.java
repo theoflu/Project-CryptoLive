@@ -22,13 +22,13 @@ public class UserServiceImpl implements UserService {
     public String streamkeyCreator(UserEntity user) throws NoSuchAlgorithmException, InvalidKeySpecException {
 
         String password = "kullanıcı_parolası";
-        // Tuz (salt) oluştur
+
         byte[] salt = new byte[16]; // Rastgele 16 byte salt
         SecureRandom secureRandom = new SecureRandom();
         secureRandom.nextBytes(salt);
         // PBKDF2 ile anahtar türetme
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 256); // 256-bit anahtar, 65536 iterasyon
+        KeySpec spec = new PBEKeySpec(user.getPassword().toCharArray(), salt, 65536, 256); // 256-bit anahtar, 65536 iterasyon
         byte[] keyBytes = factory.generateSecret(spec).getEncoded();
 
         // Üretilen anahtarı Base64 ile kodla
@@ -37,6 +37,6 @@ public class UserServiceImpl implements UserService {
         // Anahtarı yazdır
         System.out.println("Oluşturulan anahtar: " + base64Key);
 
-        return null;
+        return "Oluşturulan anahtar: " + base64Key;
     }
 }
